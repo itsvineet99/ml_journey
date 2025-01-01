@@ -50,5 +50,12 @@ ids = tokenizer.encode(text)
 # print(ids)
 # print(tokenizer.decode(ids))
 text = "Hello, do you like tea?"
-print(tokenizer.encode(text))
+# print(tokenizer.encode(text))
+
+all_tokens = sorted(list(set(preprocessed)))
+all_tokens.extend(["<|endoftext|>", "<|unk|>"])
+vocab = {token:integer for integer,token in enumerate(all_tokens)}
+
+# for i,item in enumerate(list(vocab.items())[-5:]):
+#     print(item)
         
