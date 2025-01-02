@@ -32,8 +32,40 @@ import numpy as np
 # print(np.linspace(1,20, num=15)) # gives exact numbers specified in third argument between first and second number with even space
 
 arr = np.array([1,2,3,4,5,6,7])
-print(arr[1]) # accessing array with index
-print(arr[2:5]) # slicing array
+# print(arr[1]) # accessing array with index
+# print(arr[2:5]) # slicing array
 
-arr2 = np.array([[1,2,3],[4,5,6]])
-print(arr2[0, 2]) # first element represents row, second element represents column
+# arr2 = np.array([[1,2,3],[4,5,6]])
+# print(arr2[0, 2]) # first element represents row, second element represents column
+# print(arr2[:,2]) # both rows second column
+# print(arr2[:,:2]) # both rows till second column
+
+# VECTORIZATAION, numpy has ufuncs which are functions that we can use to perform mathematical operations on ndarrays
+# we have add, subtract, divide, multiply, power, and exp and many more
+# we can also use sign directly like +, -, /, *, and **
+
+# arry = np.add(arr,15)
+# print(arry)
+# print(arr+1)
+# print(np.sqrt(arr))
+
+# REDUCE
+
+print(np.add.reduce(arr)) # performs addition all elements in array
+
+ary = np.array([[1, 2, 3], 
+                [4, 5, 6]]) 
+# axis 0 is horizontal axis
+# axis 1 is vertical axis
+print(np.add.reduce(ary, axis=0)) # rolling over the 1st axis, axis 0
+
+# np.mean (computes arithmetic mean or average)
+# np.std (computes the standard deviation)
+# np.var (computes variance)
+# np.sort (sorts an array)
+# np.argsort (returns indices that would sort an array)
+# np.min (returns the minimum value of an array)
+# np.max (returns the maximum value of an array)
+# np.argmin (returns the index of the minimum value)
+# np.argmax (returns the index of the maximum value)
+# np.array_equal (checks if two arrays have the same shape and elements)
