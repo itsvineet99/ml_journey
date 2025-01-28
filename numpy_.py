@@ -10,7 +10,8 @@ import numpy as np
 # <-in array first indexing first elemnt is row and second is column->
 
 # print(np.array(a)) # prints that array
-
+arr = np.array([1,3,6])
+print(arr)
 # np_array = np.array(a) # creates ndarray obj
 
 # print(np_array.dtype) # prints the type of ndarry obj i.e type of elemnts in that array
