@@ -162,48 +162,68 @@ class CircleModelv1(nn.Module):
     def forward(self, x):
         return self.layer_3(self.layer_2(self.layer_1(x)))
         
-model_1 = CircleModelv1().to(device)
+# model_1 = CircleModelv1().to(device)
+
+class CircleModelv2(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.layer_1 = nn.Linear(2,10)
+        self.layer_2 = nn.Linear(10,10)
+        self.layer_3 = nn.Linear(10,1)
+
+        self.relu = nn.ReLU()
+
+    def forward(self, x):
+        return self.layer_3(self.relu(self.layer_2(self.relu(self.layer_1(x)))))
+
+
+torch.manual_seed(42)
+model_2 = CircleModelv2().to(device)
 
 loss_fn = nn.BCEWithLogitsLoss()
 
-optimizer = torch.optim.SGD(params=model_1.parameters(), lr=0.1)
+optimizer = torch.optim.SGD(params=model_2.parameters(), lr=0.1)
 
 def accuracy_fn(y_true, y_preds):
     correct = torch.eq(y_true, y_preds).sum().item()
     acc = (correct/len(y_preds)) * 100
     return acc
 
-torch.manual_seed(42)
-
-epochs = 1000
+epochs = 2000
 
 x_train, y_train = x_train.to(device), y_train.to(device)
 x_test, y_test = x_test.to(device), y_test.to(device)
 
-# for epoch in range(epochs):
-#     model_1.train()
+for epoch in range(epochs):
+    model_2.train()
 
-#     y_logits = model_1(x_train).squeeze()
-#     y_preds = torch.round(torch.sigmoid(y_logits))
+    y_logits = model_2(x_train).squeeze()
+    y_preds = torch.round(torch.sigmoid(y_logits))
 
-#     loss = loss_fn(y_logits, y_train)
-#     acc = accuracy_fn(y_train, y_preds)
+    loss = loss_fn(y_logits, y_train)
+    acc = accuracy_fn(y_train, y_preds)
 
-#     optimizer.zero_grad()
+    optimizer.zero_grad()
 
-#     loss.backward()
+    loss.backward()
 
-#     optimizer.step()
+    optimizer.step()
 
-#     model_1.eval()
-#     with torch.inference_mode():
-#         test_logits = model_1(x_test).squeeze()
-#         test_preds = torch.round(torch.sigmoid(test_logits))
+    model_2.eval()
+    with torch.inference_mode():
+        test_logits = model_2(x_test).squeeze()
+        test_preds = torch.round(torch.sigmoid(test_logits))
 
-#         test_loss = loss_fn(test_logits, y_test)
-#         test_acc = accuracy_fn(y_test, test_preds)
+        test_loss = loss_fn(test_logits, y_test)
+        test_acc = accuracy_fn(y_test, test_preds)
 
-#         if epoch % 100 == 0:
-#             print(f"Epoch: {epoch} | Loss: {loss:.5f}, Acc: {acc:.2f}% | Test Loss: {test_loss:.5f}, Test Acc: {test_acc:.2f}%")
+        if epoch % 100 == 0:
+            print(f"Epoch: {epoch} | Loss: {loss:.5f}, Acc: {acc:.2f}% | Test Loss: {test_loss:.5f}, Test Acc: {test_acc:.2f}%")
             
-# model_plot(model_1,x_train,y_train,x_test,y_test)
+# model_plot(model_2,x_train,y_train,x_test,y_test)
+
+model_2.eval()
+with torch.inference_mode():
+    new_preds = torch.round(torch.sigmoid(model_2(x_test))).squeeze()
+print(new_preds[:10], y_test[:10])
